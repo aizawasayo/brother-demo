@@ -5,56 +5,42 @@ import { store } from '/@/store';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { useUserStore } from './user';
 import { useAppStoreWithOut } from './app';
-import { toRaw } from 'vue';
-import { transformObjToRoute, flatMultiLevelRoutes } from '/@/router/helper/routeHelper';
+
+import { flatMultiLevelRoutes } from '/@/router/helper/routeHelper';
 import { transformRouteToMenu } from '/@/router/helper/menuHelper';
 
 import projectSetting from '/@/settings/projectSetting';
 
 import { PermissionModeEnum } from '/@/enums/appEnum';
 
-import { asyncRoutes } from '/@/router/routes';
-import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
+import { routes as basicRoutes, asyncRoutes } from '/@/router/routes';
 
-import { filter } from '/@/utils/helper/treeHelper';
-
-import { getMenuList } from '/@/api/sys/menu';
-import { getPermCode } from '/@/api/sys/user';
-
-import { useMessage } from '/@/hooks/web/useMessage';
-import { PageEnum } from '/@/enums/pageEnum';
+function getBasicMenu() {
+  const menuList = transformRouteToMenu(basicRoutes, true);
+  menuList.sort((a, b) => {
+    return (a.meta?.orderNo || 0) - (b.meta?.orderNo || 0);
+  });
+  return menuList;
+}
 
 interface PermissionState {
-  // Permission code list
-  permCodeList: string[] | number[];
   // Whether the route has been dynamically added
   isDynamicAddedRoute: boolean;
   // To trigger a menu update
   lastBuildMenuTime: number;
-  // Backstage menu list
-  backMenuList: Menu[];
   frontMenuList: Menu[];
 }
 export const usePermissionStore = defineStore({
   id: 'app-permission',
   state: (): PermissionState => ({
-    permCodeList: [],
     // Whether the route has been dynamically added
     isDynamicAddedRoute: false,
     // To trigger a menu update
     lastBuildMenuTime: 0,
-    // Backstage menu list
-    backMenuList: [],
     // menu List
-    frontMenuList: [],
+    frontMenuList: getBasicMenu(),
   }),
   getters: {
-    getPermCodeList(): string[] | number[] {
-      return this.permCodeList;
-    },
-    getBackMenuList(): Menu[] {
-      return this.backMenuList;
-    },
     getFrontMenuList(): Menu[] {
       return this.frontMenuList;
     },
@@ -66,15 +52,6 @@ export const usePermissionStore = defineStore({
     },
   },
   actions: {
-    setPermCodeList(codeList: string[]) {
-      this.permCodeList = codeList;
-    },
-
-    setBackMenuList(list: Menu[]) {
-      this.backMenuList = list;
-      list?.length > 0 && this.setLastBuildMenuTime();
-    },
-
     setFrontMenuList(list: Menu[]) {
       this.frontMenuList = list;
     },
@@ -88,13 +65,7 @@ export const usePermissionStore = defineStore({
     },
     resetState(): void {
       this.isDynamicAddedRoute = false;
-      this.permCodeList = [];
-      this.backMenuList = [];
       this.lastBuildMenuTime = 0;
-    },
-    async changePermissionCode() {
-      const codeList = await getPermCode();
-      this.setPermCodeList(codeList);
     },
     async buildRoutesAction(): Promise<AppRouteRecordRaw[]> {
       const { t } = useI18n();
@@ -102,36 +73,19 @@ export const usePermissionStore = defineStore({
       const appStore = useAppStoreWithOut();
 
       let routes: AppRouteRecordRaw[] = [];
-      const roleList = toRaw(userStore.getRoleList) || [];
+
       const { permissionMode = projectSetting.permissionMode } = appStore.getProjectConfig;
 
-      const routeFilter = (route: AppRouteRecordRaw) => {
-        const { meta } = route;
-        const { roles } = meta || {};
-        if (!roles) return true;
-        return roleList.some((role) => roles.includes(role));
-      };
-
-      const routeRemoveIgnoreFilter = (route: AppRouteRecordRaw) => {
-        const { meta } = route;
-        const { ignoreRoute } = meta || {};
-        return !ignoreRoute;
-      };
-
       switch (permissionMode) {
-        case PermissionModeEnum.ROLE:
-          routes = filter(asyncRoutes, routeFilter);
-          routes = routes.filter(routeFilter);
+        case PermissionModeEnum.ROLE: // 菜单和路由分开配置
+          routes = asyncRoutes;
           // Convert multi-level routing to level 2 routing
           routes = flatMultiLevelRoutes(routes);
           break;
 
-        case PermissionModeEnum.ROUTE_MAPPING:
-          routes = filter(asyncRoutes, routeFilter);
-          routes = routes.filter(routeFilter);
+        case PermissionModeEnum.ROUTE_MAPPING: // 菜单由路由配置自动生成
+          routes = basicRoutes.concat(asyncRoutes);
           const menuList = transformRouteToMenu(routes, true);
-          routes = filter(routes, routeRemoveIgnoreFilter);
-          routes = routes.filter(routeRemoveIgnoreFilter);
           menuList.sort((a, b) => {
             return (a.meta?.orderNo || 0) - (b.meta?.orderNo || 0);
           });

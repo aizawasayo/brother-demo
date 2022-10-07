@@ -9,10 +9,8 @@ declare module 'vue-router' {
     dynamicLevel?: number;
     // dynamic router real route path (For performance).
     realPath?: string;
-    // Whether to ignore permissions
-    ignoreAuth?: boolean;
-    // role info
-    roles?: RoleEnum[];
+    // Whether need permissions
+    requireAuth?: boolean;
     // Whether not to cache Page
     keepAlive?: boolean;
     // icon on tab
@@ -35,8 +33,6 @@ declare module 'vue-router' {
     // Never show in menu
     hideMenu?: boolean;
     isLink?: boolean;
-    // only build for Menu
-    ignoreRoute?: boolean;
     // Hide path for children
     hidePathForChildren?: boolean;
   }

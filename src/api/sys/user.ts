@@ -7,7 +7,6 @@ enum Api {
   Login = '/login',
   Logout = '/logout',
   GetUserInfo = '/getUserInfo',
-  GetPermCode = '/getPermCode',
 }
 
 /**
@@ -30,10 +29,6 @@ export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal') 
  */
 export function getUserInfo() {
   return defHttp.get<GetUserInfoModel>({ url: Api.GetUserInfo }, { errorMessageMode: 'none' });
-}
-
-export function getPermCode() {
-  return defHttp.get<string[]>({ url: Api.GetPermCode });
 }
 
 export function doLogout() {

@@ -7,8 +7,10 @@ import { PageEnum } from '/@/enums/pageEnum';
 import { t } from '/@/hooks/web/useI18n';
 
 const modules: moduleType = import.meta.glob('./modules/**/*.ts', { eager: true });
+const asyncModules: moduleType = import.meta.glob('./asyncModules/**/*.ts', { eager: true });
 
 const routeModuleList: AppRouteModule[] = [];
+const asyncRouteModuleList: AppRouteModule[] = [];
 
 Object.keys(modules).forEach((key) => {
   const mod = modules[key].default || {};
@@ -16,7 +18,15 @@ Object.keys(modules).forEach((key) => {
   routeModuleList.push(...modList);
 });
 
-export const asyncRoutes = [PAGE_NOT_FOUND_ROUTE, ...routeModuleList];
+Object.keys(asyncModules).forEach((key) => {
+  const mod = asyncModules[key].default || {};
+  const modList = Array.isArray(mod) ? [...mod] : [mod];
+  asyncRouteModuleList.push(...modList);
+});
+
+export const routes = [PAGE_NOT_FOUND_ROUTE, ...routeModuleList];
+
+export const asyncRoutes = [PAGE_NOT_FOUND_ROUTE, ...asyncRouteModuleList];
 
 export const RootRoute: AppRouteRecordRaw = {
   path: '/',
@@ -40,6 +50,7 @@ export const LoginRoute: AppRouteRecordRaw = {
 export const basicRoutes = [
   LoginRoute,
   RootRoute,
+  ...routes,
   ...mainOutRoutes,
   REDIRECT_ROUTE,
   PAGE_NOT_FOUND_ROUTE,

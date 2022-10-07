@@ -6,7 +6,6 @@ import { Memory } from './memory';
 import {
   TOKEN_KEY,
   USER_INFO_KEY,
-  ROLES_KEY,
   LOCK_INFO_KEY,
   PROJ_CFG_KEY,
   APP_LOCAL_CACHE_KEY,
@@ -19,7 +18,6 @@ import { pick, omit } from 'lodash-es';
 interface BasicStore {
   [TOKEN_KEY]: string | number | null | undefined;
   [USER_INFO_KEY]: UserInfo;
-  [ROLES_KEY]: string[];
   [PROJ_CFG_KEY]: ProjectConfig;
 }
 
