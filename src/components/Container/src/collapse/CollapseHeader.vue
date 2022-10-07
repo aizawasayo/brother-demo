@@ -16,7 +16,6 @@
 </template>
 <script lang="ts">
   import { defineComponent } from 'vue';
-  import { BasicArrow, BasicTitle } from '/@/components/Basic';
 
   const props = {
     prefixCls: { type: String },
@@ -30,7 +29,6 @@
   };
 
   export default defineComponent({
-    components: { BasicArrow, BasicTitle },
     inheritAttrs: false,
     props,
     emits: ['expand'],

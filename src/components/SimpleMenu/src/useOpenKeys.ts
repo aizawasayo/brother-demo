@@ -14,12 +14,10 @@ export function useOpenKeys(
   menuState: MenuState,
   menus: Ref<MenuType[]>,
   accordion: Ref<boolean>,
-  mixSider: Ref<boolean>,
   collapse: Ref<boolean>,
 ) {
   const debounceSetOpenKeys = useDebounceFn(setOpenKeys, 50);
   async function setOpenKeys(path: string) {
-    const native = !mixSider.value;
     const menuList = toRaw(menus.value);
     useTimeoutFn(
       () => {
@@ -38,7 +36,7 @@ export function useOpenKeys(
         menuState.activeSubMenuNames = menuState.openNames;
       },
       30,
-      native,
+      true,
     );
   }
 

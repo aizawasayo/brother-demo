@@ -3,11 +3,10 @@
   import type { FormActionType, FormProps } from '../types/form';
   import type { FormSchema } from '../types/form';
   import type { ValidationRule } from 'ant-design-vue/lib/form/Form';
-  import type { TableActionType } from '/@/components/Table';
   import { defineComponent, computed, unref, toRefs } from 'vue';
   import { Form, Col, Divider } from 'ant-design-vue';
   import { componentMap } from '../componentMap';
-  import { BasicHelp } from '/@/components/Basic';
+  import BasicHelp from '/@/components/Basic/BasicHelp.vue';
   import { isBoolean, isFunction, isNull } from '/@/utils/is';
   import { getSlot } from '/@/utils/helper/tsxHelper';
   import { createPlaceholderMessage, setComponentRuleType } from '../helper';
@@ -39,9 +38,6 @@
         type: Function as PropType<(key: string, value: any) => void>,
         default: null,
       },
-      tableAction: {
-        type: Object as PropType<TableActionType>,
-      },
       formActionType: {
         type: Object as PropType<FormActionType>,
       },
@@ -72,10 +68,10 @@
       });
 
       const getComponentsProps = computed(() => {
-        const { schema, tableAction, formModel, formActionType } = props;
+        const { schema, formModel, formActionType } = props;
         let { componentProps = {} } = schema;
         if (isFunction(componentProps)) {
-          componentProps = componentProps({ schema, tableAction, formModel, formActionType }) ?? {};
+          componentProps = componentProps({ schema, formModel, formActionType }) ?? {};
         }
         if (schema.component === 'Divider') {
           componentProps = Object.assign({ type: 'horizontal' }, componentProps, {

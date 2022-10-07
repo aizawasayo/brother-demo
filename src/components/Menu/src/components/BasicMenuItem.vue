@@ -1,20 +1,23 @@
 <template>
-  <MenuItem :key="item.path">
+  <a-menu-item :key="item.path">
     <MenuItemContent v-bind="$props" :item="item" />
-  </MenuItem>
+  </a-menu-item>
 </template>
 <script lang="ts">
   import { defineComponent } from 'vue';
-  import { Menu } from 'ant-design-vue';
   import { itemProps } from '../props';
+  import { useI18n } from '/@/hooks/web/useI18n';
+  import { useDesign } from '/@/hooks/web/useDesign';
 
   import MenuItemContent from './MenuItemContent.vue';
   export default defineComponent({
     name: 'BasicMenuItem',
-    components: { MenuItem: Menu.Item, MenuItemContent },
+    components: { MenuItemContent },
     props: itemProps,
     setup() {
-      return {};
+      const { t } = useI18n();
+      const { prefixCls } = useDesign('basic-menu-item-content');
+      return { t, prefixCls };
     },
   });
 </script>

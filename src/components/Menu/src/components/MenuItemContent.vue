@@ -6,8 +6,6 @@
 </template>
 <script lang="ts">
   import { computed, defineComponent } from 'vue';
-
-  import Icon from '/@/components/Icon/index';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { contentProps } from '../props';
@@ -15,9 +13,6 @@
 
   export default defineComponent({
     name: 'MenuItemContent',
-    components: {
-      Icon,
-    },
     props: contentProps,
     setup(props) {
       const { prefixCls } = useDesign('basic-menu-item-content');

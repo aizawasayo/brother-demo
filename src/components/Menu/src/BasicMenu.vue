@@ -1,5 +1,5 @@
 <template>
-  <Menu
+  <a-menu
     :selectedKeys="selectedKeys"
     :defaultSelectedKeys="defaultSelectedKeys"
     :mode="mode"
@@ -13,16 +13,19 @@
     v-bind="getInlineCollapseOptions"
   >
     <template v-for="item in items" :key="item.path">
-      <BasicSubMenuItem :item="item" :theme="theme" :isHorizontal="isHorizontal" />
+      <BasicSubMenuItem
+        :item="item"
+        :theme="theme"
+        :isHorizontal="mode === MenuModeEnum.HORIZONTAL"
+      />
     </template>
-  </Menu>
+  </a-menu>
 </template>
 <script lang="ts">
   import type { MenuState } from './types';
   import { computed, defineComponent, unref, reactive, watch, toRefs, ref } from 'vue';
-  import { Menu } from 'ant-design-vue';
   import BasicSubMenuItem from './components/BasicSubMenuItem.vue';
-  import { MenuModeEnum, MenuTypeEnum } from '/@/enums/menuEnum';
+  import { MenuModeEnum } from '/@/enums/menuEnum';
   import { useOpenKeys } from './useOpenKeys';
   import { RouteLocationNormalizedLoaded, useRouter } from 'vue-router';
   import { isFunction } from '/@/utils/is';
@@ -30,14 +33,13 @@
   import { useMenuSetting } from '/@/hooks/setting/useMenuSetting';
   import { REDIRECT_NAME } from '/@/router/constant';
   import { useDesign } from '/@/hooks/web/useDesign';
-  import { getCurrentParentPath } from '/@/router/menus';
+  import { useAppInject } from '/@/hooks/web/useAppInject';
   import { listenerRouteChange } from '/@/logics/mitt/routeChange';
   import { getAllParentPath } from '/@/router/helper/menuHelper';
 
   export default defineComponent({
     name: 'BasicMenu',
     components: {
-      Menu,
       BasicSubMenuItem,
     },
     props: basicProps,
@@ -54,9 +56,10 @@
       });
 
       const { prefixCls } = useDesign('basic-menu');
+      const { getIsMobile } = useAppInject();
       const { items, mode, accordion } = toRefs(props);
 
-      const { getCollapsed, getTopMenuAlign, getSplit } = useMenuSetting();
+      const { getCollapsed, getTopMenuAlign } = useMenuSetting();
 
       const { currentRoute } = useRouter();
 
@@ -67,23 +70,13 @@
         accordion,
       );
 
-      const getIsTopMenu = computed(() => {
-        const { type, mode } = props;
-
-        return (
-          (type === MenuTypeEnum.TOP_MENU && mode === MenuModeEnum.HORIZONTAL) ||
-          (props.isHorizontal && unref(getSplit))
-        );
-      });
-
       const getMenuClass = computed(() => {
-        const align = props.isHorizontal && unref(getSplit) ? 'start' : unref(getTopMenuAlign);
+        const align = unref(getTopMenuAlign);
         return [
           prefixCls,
           `justify-${align}`,
           {
-            [`${prefixCls}__second`]: !props.isHorizontal && unref(getSplit),
-            [`${prefixCls}__sidebar-hor`]: unref(getIsTopMenu),
+            [`${prefixCls}__sidebar-hor`]: !unref(getIsMobile),
           },
         ];
       });
@@ -93,7 +86,7 @@
 
         const inlineCollapseOptions: { inlineCollapsed?: boolean } = {};
         if (isInline) {
-          inlineCollapseOptions.inlineCollapsed = props.mixSider ? false : unref(getCollapsed);
+          inlineCollapseOptions.inlineCollapsed = unref(getCollapsed);
         }
         return inlineCollapseOptions;
       });
@@ -109,13 +102,12 @@
         }
       });
 
-      !props.mixSider &&
-        watch(
-          () => props.items,
-          () => {
-            handleMenuChange();
-          },
-        );
+      watch(
+        () => props.items,
+        () => {
+          handleMenuChange();
+        },
+      );
 
       async function handleMenuClick({ key }: { key: string; keyPath: string[] }) {
         const { beforeClickFn } = props;
@@ -139,13 +131,9 @@
           (route || unref(currentRoute)).path;
         setOpenKeys(path);
         if (unref(currentActiveMenu)) return;
-        if (props.isHorizontal && unref(getSplit)) {
-          const parentPath = await getCurrentParentPath(path);
-          menuState.selectedKeys = [parentPath];
-        } else {
-          const parentPaths = await getAllParentPath(props.items, path);
-          menuState.selectedKeys = parentPaths;
-        }
+
+        const parentPaths = await getAllParentPath(props.items, path);
+        menuState.selectedKeys = parentPaths;
       }
 
       return {
@@ -155,6 +143,7 @@
         handleOpenChange,
         getOpenKeys,
         ...toRefs(menuState),
+        MenuModeEnum,
       };
     },
   });

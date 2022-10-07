@@ -1,12 +1,12 @@
 <template>
-  <Form
+  <a-form
     v-bind="getBindValue"
     :class="getFormClass"
     ref="formElRef"
     :model="formModel"
     @keypress.enter="handleEnterPress"
   >
-    <Row v-bind="getRow">
+    <a-row v-bind="getRow">
       <slot name="formHeader"></slot>
       <template v-for="schema in getSchema" :key="schema.field">
         <FormItem
@@ -33,8 +33,8 @@
         </template>
       </FormAction>
       <slot name="formFooter"></slot>
-    </Row>
-  </Form>
+    </a-row>
+  </a-form>
 </template>
 <script lang="ts">
   import type { FormActionType, FormProps, FormSchema } from './types/form';
@@ -42,7 +42,6 @@
   import type { Ref } from 'vue';
 
   import { defineComponent, reactive, ref, computed, unref, onMounted, watch, nextTick } from 'vue';
-  import { Form, Row } from 'ant-design-vue';
   import FormItem from './components/FormItem.vue';
   import FormAction from './components/FormAction.vue';
 
@@ -64,7 +63,7 @@
 
   export default defineComponent({
     name: 'BasicForm',
-    components: { FormItem, Form, Row, FormAction },
+    components: { FormItem, FormAction },
     props: basicProps,
     emits: ['advanced-change', 'reset', 'submit', 'register'],
     setup(props, { emit, attrs }) {

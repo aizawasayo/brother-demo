@@ -1,6 +1,7 @@
 import type { Router, RouteLocationNormalized } from 'vue-router';
-import { useAppStoreWithOut } from '/@/store/modules/app';
-import { useUserStoreWithOut } from '/@/store/modules/user';
+import { useAppStoreWithOut, useAppStore } from '/@/store/modules/app';
+import { useUserStoreWithOut, useUserStore } from '/@/store/modules/user';
+import { usePermissionStore } from '/@/store/modules/permission';
 import { useTransitionSetting } from '/@/hooks/setting/useTransitionSetting';
 import { AxiosCanceler } from '/@/utils/http/axios/axiosCancel';
 import { Modal, notification } from 'ant-design-vue';
@@ -8,10 +9,10 @@ import { warn } from '/@/utils/log';
 import { unref } from 'vue';
 import { setRouteChange } from '/@/logics/mitt/routeChange';
 import { createPermissionGuard } from './permissionGuard';
-import { createStateGuard } from './stateGuard';
 import nProgress from 'nprogress';
 import projectSetting from '/@/settings/projectSetting';
-import { createParamMenuGuard } from './paramMenuGuard';
+import { PageEnum } from '/@/enums/pageEnum';
+import { removeRouteChangeListener } from '/@/logics/mitt/routeChange';
 
 // Don't change the order of creation
 export function setupRouterGuard(router: Router) {
@@ -22,7 +23,6 @@ export function setupRouterGuard(router: Router) {
   createMessageGuard(router);
   createProgressGuard(router);
   createPermissionGuard(router);
-  createParamMenuGuard(router); // must after createPermissionGuard (menu has been built.)
   createStateGuard(router);
 }
 
@@ -30,20 +30,20 @@ export function setupRouterGuard(router: Router) {
  * Hooks for handling page state
  */
 function createPageGuard(router: Router) {
-  const loadedPageMap = new Map<string, boolean>();
+  // const loadedPageMap = new Map<string, boolean>();
 
   router.beforeEach(async (to) => {
     // The page has already been loaded, it will be faster to open it again, you don’t need to do loading and other processing
-    to.meta.loaded = !!loadedPageMap.get(to.path);
-    // Notify routing changes
+    // to.meta.loaded = !!loadedPageMap.get(to.path);
+    // Notify routing changes, 路由改变时通知改变菜单选中状态
     setRouteChange(to);
 
     return true;
   });
 
-  router.afterEach((to) => {
-    loadedPageMap.set(to.path, true);
-  });
+  // router.afterEach((to) => {
+  //   loadedPageMap.set(to.path, true);
+  // });
 }
 
 // Used to handle page loading status
@@ -143,5 +143,20 @@ export function createProgressGuard(router: Router) {
   router.afterEach(async () => {
     unref(getOpenNProgress) && nProgress.done();
     return true;
+  });
+}
+
+export function createStateGuard(router: Router) {
+  router.afterEach((to) => {
+    // Just enter the login page and clear the authentication information
+    if (to.path === PageEnum.BASE_LOGIN) {
+      const userStore = useUserStore();
+      const appStore = useAppStore();
+      const permissionStore = usePermissionStore();
+      appStore.resetAllState();
+      permissionStore.resetState();
+      userStore.resetState();
+      removeRouteChangeListener();
+    }
   });
 }

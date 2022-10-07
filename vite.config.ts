@@ -62,15 +62,16 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
     build: {
       target: 'es2015',
       outDir: OUTPUT_DIR,
-      terserOptions: {
-        compress: {
-          keep_infinity: true,
-          // Used to delete console in production environment
-          drop_console: VITE_DROP_CONSOLE,
-        },
-      },
+      minify: 'esbuild',
+      // terserOptions: {
+      //   compress: {
+      //     keep_infinity: true,
+      //     // Used to delete console in production environment
+      //     drop_console: VITE_DROP_CONSOLE,
+      //   },
+      // },
       // Turning off brotliSize display can slightly reduce packaging time
-      brotliSize: false,
+      // brotliSize: false,
       chunkSizeWarningLimit: 2000,
     },
     define: {

@@ -1,24 +1,22 @@
 <template>
   <div :class="prefixCls">
-    <PreviewGroup>
+    <a-image-preview-group>
       <slot v-if="!imageList || $slots.default"></slot>
       <template v-else>
         <template v-for="item in getImageList" :key="item.src">
-          <Image v-bind="item">
+          <a-image v-bind="item">
             <template #placeholder v-if="item.placeholder">
-              <Image v-bind="item" :src="item.placeholder" :preview="false" />
+              <a-image v-bind="item" :src="item.placeholder" :preview="false" />
             </template>
-          </Image>
+          </a-image>
         </template>
       </template>
-    </PreviewGroup>
+    </a-image-preview-group>
   </div>
 </template>
 <script lang="ts">
   import type { PropType } from 'vue';
   import { defineComponent, computed } from 'vue';
-
-  import { Image } from 'ant-design-vue';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { propTypes } from '/@/utils/propTypes';
   import { isString } from '/@/utils/is';
@@ -43,10 +41,6 @@
 
   export default defineComponent({
     name: 'ImagePreview',
-    components: {
-      Image,
-      PreviewGroup: Image.PreviewGroup,
-    },
     props: {
       functional: propTypes.bool,
       imageList: {

@@ -1,5 +1,5 @@
 <template>
-  <Drawer :class="prefixCls" @close="onClose" v-bind="getBindValues">
+  <a-drawer @close="onClose" v-bind="getBindValues">
     <template #title v-if="!$slots.title">
       <DrawerHeader
         :title="getMergeProps.title"
@@ -28,7 +28,7 @@
         <slot :name="item" v-bind="data || {}"></slot>
       </template>
     </DrawerFooter>
-  </Drawer>
+  </a-drawer>
 </template>
 <script lang="ts">
   import type { DrawerInstance, DrawerProps } from './typing';
@@ -43,19 +43,17 @@
     toRaw,
     getCurrentInstance,
   } from 'vue';
-  import { Drawer } from 'ant-design-vue';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { isFunction, isNumber } from '/@/utils/is';
   import { deepMerge } from '/@/utils';
   import DrawerFooter from './components/DrawerFooter.vue';
   import DrawerHeader from './components/DrawerHeader.vue';
-  import { ScrollContainer } from '/@/components/Container';
   import { basicProps } from './props';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { useAttrs } from '/@/hooks/core/useAttrs';
 
   export default defineComponent({
-    components: { Drawer, ScrollContainer, DrawerFooter, DrawerHeader },
+    components: { DrawerFooter, DrawerHeader },
     inheritAttrs: false,
     props: basicProps,
     emits: ['visible-change', 'ok', 'close', 'register'],
@@ -93,8 +91,11 @@
           if (!width) {
             opt.width = '100%';
           }
+
           const detailCls = `${prefixCls}__detail`;
-          opt.wrapClassName = wrapClassName ? `${wrapClassName} ${detailCls}` : detailCls;
+          opt.class = wrapClassName
+            ? `${prefixCls} ${wrapClassName} ${detailCls}`
+            : `${prefixCls} ${detailCls}`;
 
           if (!getContainer) {
             // TODO type error?
@@ -103,6 +104,10 @@
         }
         return opt as DrawerProps;
       });
+
+      // const getClass = computed(() => {
+
+      // })
 
       const getBindValues = computed((): DrawerProps => {
         return {

@@ -25,7 +25,7 @@
 
       // Monitor screen breakpoint information changes
       createBreakpointListen(({ screenMap, sizeEnum, width }) => {
-        const lgWidth = screenMap.get(sizeEnum.LG);
+        const lgWidth = screenMap.get(sizeEnum.SM);
         if (lgWidth) {
           isMobile.value = width.value - 1 < lgWidth;
         }
@@ -45,32 +45,25 @@
           if (!unref(isSetState)) {
             isSetState.value = true;
             const {
-              menuSetting: {
-                type: menuType,
-                mode: menuMode,
-                collapsed: menuCollapsed,
-                split: menuSplit,
-              },
+              menuSetting: { type: menuType, mode: menuMode, collapsed: menuCollapsed },
             } = appStore.getProjectConfig;
             appStore.setProjectConfig({
               menuSetting: {
                 type: MenuTypeEnum.SIDEBAR,
                 mode: MenuModeEnum.INLINE,
-                split: false,
               },
             });
-            appStore.setBeforeMiniInfo({ menuMode, menuCollapsed, menuType, menuSplit });
+            appStore.setBeforeMiniInfo({ menuMode, menuCollapsed, menuType });
           }
         } else {
           if (unref(isSetState)) {
             isSetState.value = false;
-            const { menuMode, menuCollapsed, menuType, menuSplit } = appStore.getBeforeMiniInfo;
+            const { menuMode, menuCollapsed, menuType } = appStore.getBeforeMiniInfo;
             appStore.setProjectConfig({
               menuSetting: {
                 type: menuType,
                 mode: menuMode,
                 collapsed: menuCollapsed,
-                split: menuSplit,
               },
             });
           }

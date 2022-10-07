@@ -5,17 +5,12 @@ import { computed } from 'vue';
 import { useAppStore } from '/@/store/modules/app';
 import { ContentEnum, ThemeEnum } from '/@/enums/appEnum';
 
-type RootSetting = Omit<
-  ProjectConfig,
-  'locale' | 'headerSetting' | 'menuSetting' | 'multiTabsSetting'
->;
+type RootSetting = Omit<ProjectConfig, 'locale' | 'headerSetting' | 'menuSetting'>;
 
 export function useRootSetting() {
   const appStore = useAppStore();
 
   const getPageLoading = computed(() => appStore.getPageLoading);
-
-  const getOpenKeepAlive = computed(() => appStore.getProjectConfig.openKeepAlive);
 
   const getSettingButtonPosition = computed(() => appStore.getProjectConfig.settingButtonPosition);
 
@@ -31,8 +26,6 @@ export function useRootSetting() {
 
   const getShowSettingButton = computed(() => appStore.getProjectConfig.showSettingButton);
 
-  const getUseErrorHandle = computed(() => appStore.getProjectConfig.useErrorHandle);
-
   const getShowFooter = computed(() => appStore.getProjectConfig.showFooter);
 
   const getShowBreadCrumb = computed(() => appStore.getProjectConfig.showBreadCrumb);
@@ -41,13 +34,9 @@ export function useRootSetting() {
 
   const getShowBreadCrumbIcon = computed(() => appStore.getProjectConfig.showBreadCrumbIcon);
 
-  const getFullContent = computed(() => appStore.getProjectConfig.fullContent);
-
   const getColorWeak = computed(() => appStore.getProjectConfig.colorWeak);
 
   const getGrayMode = computed(() => appStore.getProjectConfig.grayMode);
-
-  const getLockTime = computed(() => appStore.getProjectConfig.lockTime);
 
   const getShowDarkModeToggle = computed(() => appStore.getProjectConfig.showDarkModeToggle);
 
@@ -68,25 +57,20 @@ export function useRootSetting() {
   }
   return {
     setRootSetting,
-
     getSettingButtonPosition,
-    getFullContent,
     getColorWeak,
     getGrayMode,
     getLayoutContentMode,
     getPageLoading,
-    getOpenKeepAlive,
     getCanEmbedIFramePage,
     getPermissionMode,
     getShowLogo,
-    getUseErrorHandle,
     getShowBreadCrumb,
     getShowBreadCrumbIcon,
     getUseOpenBackTop,
     getShowSettingButton,
     getShowFooter,
     getContentMode,
-    getLockTime,
     getThemeColor,
     getDarkMode,
     setDarkMode,

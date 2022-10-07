@@ -10,12 +10,12 @@ const emitter = mitt();
 
 const key = Symbol();
 
-let lastChangeTab: RouteLocationNormalized;
+let lastChangePage: RouteLocationNormalized;
 
 export function setRouteChange(lastChangeRoute: RouteLocationNormalized) {
   const r = getRawRoute(lastChangeRoute);
   emitter.emit(key, r);
-  lastChangeTab = r;
+  lastChangePage = r;
 }
 
 export function listenerRouteChange(
@@ -23,9 +23,9 @@ export function listenerRouteChange(
   immediate = true,
 ) {
   emitter.on(key, callback);
-  immediate && lastChangeTab && callback(lastChangeTab);
+  immediate && lastChangePage && callback(lastChangePage);
 }
 
-export function removeTabChangeListener() {
+export function removeRouteChangeListener() {
   emitter.clear();
 }

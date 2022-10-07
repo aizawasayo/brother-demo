@@ -6,12 +6,11 @@
 
 <script lang="ts">
   import { defineComponent, ref, unref, nextTick } from 'vue';
-  import { Scrollbar, ScrollbarType } from '/@/components/Scrollbar';
+  import type { ScrollbarType } from '/@/components/Scrollbar';
   import { useScrollTo } from '/@/hooks/event/useScrollTo';
 
   export default defineComponent({
     name: 'ScrollContainer',
-    components: { Scrollbar },
     setup() {
       const scrollbarRef = ref<Nullable<ScrollbarType>>(null);
 

@@ -45,7 +45,6 @@
 
   import { defineComponent, computed } from 'vue';
   import { useDesign } from '/@/hooks/web/useDesign';
-  import Icon from '/@/components/Icon/index';
 
   import MenuItem from './components/MenuItem.vue';
   import SubMenu from './components/SubMenuItem.vue';
@@ -59,7 +58,6 @@
       SubMenu,
       MenuItem,
       SimpleMenuTag: createAsyncComponent(() => import('./SimpleMenuTag.vue')),
-      Icon,
     },
     props: {
       item: {

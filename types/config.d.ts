@@ -1,4 +1,4 @@
-import { MenuTypeEnum, MenuModeEnum, TriggerEnum, MixSidebarTriggerEnum } from '/@/enums/menuEnum';
+import { MenuTypeEnum, MenuModeEnum } from '/@/enums/menuEnum';
 import {
   ContentEnum,
   PermissionModeEnum,
@@ -14,48 +14,23 @@ export type LocaleType = 'zh_CN' | 'en' | 'ru' | 'ja' | 'ko';
 
 export interface MenuSetting {
   bgColor: string;
-  fixed: boolean;
   collapsed: boolean;
   canDrag: boolean;
-  show: boolean;
-  hidden: boolean;
-  split: boolean;
   menuWidth: number;
-  mode: MenuModeEnum;
-  type: MenuTypeEnum;
   theme: ThemeEnum;
   topMenuAlign: 'start' | 'center' | 'end';
-  trigger: TriggerEnum;
   accordion: boolean;
-  closeMixSidebarOnChange: boolean;
   collapsedShowTitle: boolean;
-  mixSideTrigger: MixSidebarTriggerEnum;
-  mixSideFixed: boolean;
-}
-
-export interface MultiTabsSetting {
-  cache: boolean;
-  show: boolean;
-  showQuick: boolean;
-  canDrag: boolean;
-  showRedo: boolean;
-  showFold: boolean;
 }
 
 export interface HeaderSetting {
   bgColor: string;
   fixed: boolean;
-  show: boolean;
   theme: ThemeEnum;
   // Turn on full screen
   showFullScreen: boolean;
-  // Whether to show the lock screen
-  useLockPage: boolean;
-  // Show document button
-  showDoc: boolean;
   // Show message center button
   showNotice: boolean;
-  showSearch: boolean;
 }
 
 export interface LocaleSetting {
@@ -98,9 +73,6 @@ export interface ProjectConfig {
   colorWeak: boolean;
   // Theme color
   themeColor: string;
-
-  // The main interface is displayed in full screen, the menu is not displayed, and the top
-  fullContent: boolean;
   // content width
   contentMode: ContentEnum;
   // Whether to display the logo
@@ -111,20 +83,12 @@ export interface ProjectConfig {
   headerSetting: HeaderSetting;
   // menuSetting
   menuSetting: MenuSetting;
-  // Multi-tab settings
-  multiTabsSetting: MultiTabsSetting;
   // Animation configuration
   transitionSetting: TransitionSetting;
-  // pageLayout whether to enable keep-alive
-  openKeepAlive: boolean;
-  // Lock screen time
-  lockTime: number;
   // Show breadcrumbs
   showBreadCrumb: boolean;
   // Show breadcrumb icon
   showBreadCrumbIcon: boolean;
-  // Use error-handler-plugin
-  useErrorHandle: boolean;
   // Whether to open back to top
   useOpenBackTop: boolean;
   // Is it possible to embed iframe pages

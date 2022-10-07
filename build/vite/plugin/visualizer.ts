@@ -1,6 +1,7 @@
 /**
  * Package file volume analysis
  */
+import type { Plugin } from 'vite';
 import visualizer from 'rollup-plugin-visualizer';
 import { isReportMode } from '../../utils';
 

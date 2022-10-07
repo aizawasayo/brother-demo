@@ -6,27 +6,13 @@ export default {
     dropdownItemLoginOut: '退出系统',
 
     // tooltip
-    tooltipErrorLog: '错误日志',
-    tooltipLock: '锁定屏幕',
+
     tooltipNotify: '消息通知',
 
     tooltipEntryFull: '全屏',
     tooltipExitFull: '退出全屏',
 
-    // lock
-    lockScreenPassword: '锁屏密码',
-    lockScreen: '锁定屏幕',
-    lockScreenBtn: '锁定',
-
     home: '首页',
-  },
-  multipleTab: {
-    reload: '重新加载',
-    close: '关闭标签页',
-    closeLeft: '关闭左侧标签页',
-    closeRight: '关闭右侧标签页',
-    closeOther: '关闭其它标签页',
-    closeAll: '关闭全部标签页',
   },
   setting: {
     // content mode
@@ -36,15 +22,6 @@ export default {
     topMenuAlignLeft: '居左',
     topMenuAlignRight: '居中',
     topMenuAlignCenter: '居右',
-    // menu trigger
-    menuTriggerNone: '不显示',
-    menuTriggerBottom: '底部',
-    menuTriggerTop: '顶部',
-    // menu type
-    menuTypeSidebar: '左侧菜单模式',
-    menuTypeMixSidebar: '左侧菜单混合模式',
-    menuTypeMix: '顶部菜单混合模式',
-    menuTypeTopMenu: '顶部菜单模式',
 
     on: '开',
     off: '关',
@@ -64,7 +41,7 @@ export default {
     interfaceFunction: '界面功能',
     interfaceDisplay: '界面显示',
     animation: '动画',
-    splitMenu: '分割菜单',
+
     closeMixSidebarOnChange: '切换页面关闭菜单',
 
     sysTheme: '系统主题',
@@ -105,11 +82,6 @@ export default {
 
     fixedHeader: '固定header',
     fixedSideBar: '固定Sidebar',
-
-    mixSidebarTrigger: '混合菜单触发方式',
-    triggerHover: '悬停',
-    triggerClick: '点击',
-
     mixSidebarFixed: '固定展开菜单',
   },
 };

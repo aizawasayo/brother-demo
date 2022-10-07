@@ -1,11 +1,10 @@
 <template>
-  <Card title="销售统计" :loading="loading">
+  <a-card title="销售统计" :loading="loading">
     <div ref="chartRef" :style="{ width, height }"></div>
-  </Card>
+  </a-card>
 </template>
 <script lang="ts" setup>
   import { Ref, ref, watch } from 'vue';
-  import { Card } from 'ant-design-vue';
   import { useECharts } from '/@/hooks/web/useECharts';
 
   const props = defineProps({
@@ -39,27 +38,27 @@
           splitNumber: 8,
           indicator: [
             {
-              text: '2017',
+              name: '2017',
               max: 100,
             },
             {
-              text: '2017',
+              name: '2017',
               max: 100,
             },
             {
-              text: '2018',
+              name: '2018',
               max: 100,
             },
             {
-              text: '2019',
+              name: '2019',
               max: 100,
             },
             {
-              text: '2020',
+              name: '2020',
               max: 100,
             },
             {
-              text: '2021',
+              name: '2021',
               max: 100,
             },
           ],

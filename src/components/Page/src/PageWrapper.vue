@@ -1,6 +1,6 @@
 <template>
   <div :class="getClass" ref="wrapperRef">
-    <PageHeader
+    <a-page-header
       :ghost="ghost"
       :title="title"
       v-bind="omit($attrs, 'class')"
@@ -16,7 +16,7 @@
       <template #[item]="data" v-for="item in getHeaderSlots">
         <slot :name="item" v-bind="data || {}"></slot>
       </template>
-    </PageHeader>
+    </a-page-header>
 
     <div class="overflow-hidden" :class="getContentClass" :style="getContentStyle" ref="contentRef">
       <slot></slot>
@@ -41,13 +41,12 @@
   import { useDesign } from '/@/hooks/web/useDesign';
   import { propTypes } from '/@/utils/propTypes';
   import { omit } from 'lodash-es';
-  import { PageHeader } from 'ant-design-vue';
   import { useContentHeight } from '/@/hooks/web/useContentHeight';
   import { PageWrapperFixedHeightKey } from '..';
 
   export default defineComponent({
     name: 'PageWrapper',
-    components: { PageFooter, PageHeader },
+    components: { PageFooter },
     inheritAttrs: false,
     props: {
       title: propTypes.string,

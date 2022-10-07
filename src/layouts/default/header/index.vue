@@ -1,42 +1,26 @@
 <template>
-  <Header :class="getHeaderClass">
+  <a-layout-Header :class="getHeaderClass">
     <!-- left start -->
     <div :class="`${prefixCls}-left`">
       <!-- logo -->
       <AppLogo
-        v-if="getShowHeaderLogo || getIsMobile"
+        v-if="!getIsMobile && getShowHeaderLogo"
         :class="`${prefixCls}-logo`"
         :theme="getHeaderTheme"
         :style="getLogoWidth"
       />
-      <LayoutTrigger
-        v-if="
-          (getShowContent && getShowHeaderTrigger && !getSplit && !getIsMixSidebar) || getIsMobile
-        "
-        :theme="getHeaderTheme"
-        :sider="false"
-      />
-      <LayoutBreadcrumb v-if="getShowContent && getShowBread" :theme="getHeaderTheme" />
+      <LayoutTrigger v-if="getIsMobile" :theme="getHeaderTheme" :sider="false" />
     </div>
     <!-- left end -->
 
     <!-- menu start -->
-    <div :class="`${prefixCls}-menu`" v-if="getShowTopMenu && !getIsMobile">
-      <LayoutMenu
-        :isHorizontal="true"
-        :theme="getHeaderTheme"
-        :splitType="getSplitType"
-        :menuMode="getMenuMode"
-      />
+    <div :class="`${prefixCls}-menu`" v-if="!getIsMobile">
+      <LayoutMenu :theme="getHeaderTheme" />
     </div>
     <!-- menu-end -->
 
     <!-- action  -->
     <div :class="`${prefixCls}-action`">
-      <AppSearch :class="`${prefixCls}-action__item `" v-if="getShowSearch" />
-
-      <ErrorAction v-if="getUseErrorHandle" :class="`${prefixCls}-action__item error-action`" />
-
       <Notify v-if="getShowNotice" :class="`${prefixCls}-action__item notify-item`" />
 
       <FullScreen v-if="getShowFullScreen" :class="`${prefixCls}-action__item fullscreen-item`" />
@@ -47,34 +31,30 @@
         :showText="false"
         :class="`${prefixCls}-action__item`"
       />
+      <AppDarkModeToggle class="mx-auto" />
 
       <UserDropDown :theme="getHeaderTheme" />
 
       <SettingDrawer v-if="getShowSetting" :class="`${prefixCls}-action__item`" />
     </div>
-  </Header>
+  </a-layout-Header>
 </template>
 <script lang="ts">
   import { defineComponent, unref, computed } from 'vue';
 
   import { propTypes } from '/@/utils/propTypes';
 
-  import { Layout } from 'ant-design-vue';
-  import { AppLogo } from '/@/components/Application';
-  import LayoutMenu from '../menu/index.vue';
-  import LayoutTrigger from '../trigger/index.vue';
-
-  import { AppSearch } from '/@/components/Application';
+  import LayoutMenu from '../menu.vue';
+  import LayoutTrigger from '../trigger.vue';
 
   import { useHeaderSetting } from '/@/hooks/setting/useHeaderSetting';
   import { useMenuSetting } from '/@/hooks/setting/useMenuSetting';
   import { useRootSetting } from '/@/hooks/setting/useRootSetting';
 
-  import { MenuModeEnum, MenuSplitTyeEnum } from '/@/enums/menuEnum';
+  import { MenuModeEnum } from '/@/enums/menuEnum';
   import { SettingButtonPositionEnum } from '/@/enums/appEnum';
-  import { AppLocalePicker } from '/@/components/Application';
 
-  import { UserDropDown, LayoutBreadcrumb, FullScreen, Notify, ErrorAction } from './components';
+  import { UserDropDown, FullScreen, Notify } from './components';
   import { useAppInject } from '/@/hooks/web/useAppInject';
   import { useDesign } from '/@/hooks/web/useDesign';
 
@@ -84,17 +64,11 @@
   export default defineComponent({
     name: 'LayoutHeader',
     components: {
-      Header: Layout.Header,
-      AppLogo,
       LayoutTrigger,
-      LayoutBreadcrumb,
       LayoutMenu,
       UserDropDown,
-      AppLocalePicker,
       FullScreen,
       Notify,
-      AppSearch,
-      ErrorAction,
       SettingDrawer: createAsyncComponent(() => import('/@/layouts/default/setting/index.vue'), {
         loading: true,
       }),
@@ -104,27 +78,11 @@
     },
     setup(props) {
       const { prefixCls } = useDesign('layout-header');
-      const {
-        getShowTopMenu,
-        getShowHeaderTrigger,
-        getSplit,
-        getIsMixMode,
-        getMenuWidth,
-        getIsMixSidebar,
-      } = useMenuSetting();
-      const { getUseErrorHandle, getShowSettingButton, getSettingButtonPosition } =
-        useRootSetting();
+      const { getMenuWidth } = useMenuSetting();
+      const { getShowSettingButton, getSettingButtonPosition } = useRootSetting();
 
-      const {
-        getHeaderTheme,
-        getShowFullScreen,
-        getShowNotice,
-        getShowContent,
-        getShowBread,
-        getShowHeaderLogo,
-        getShowHeader,
-        getShowSearch,
-      } = useHeaderSetting();
+      const { getHeaderTheme, getShowFullScreen, getShowNotice, getShowHeaderLogo } =
+        useHeaderSetting();
 
       const { getShowLocalePicker } = useLocale();
 
@@ -149,25 +107,17 @@
         const settingButtonPosition = unref(getSettingButtonPosition);
 
         if (settingButtonPosition === SettingButtonPositionEnum.AUTO) {
-          return unref(getShowHeader);
+          return true;
         }
         return settingButtonPosition === SettingButtonPositionEnum.HEADER;
       });
 
       const getLogoWidth = computed(() => {
-        if (!unref(getIsMixMode) || unref(getIsMobile)) {
+        if (unref(getIsMobile)) {
           return {};
         }
         const width = unref(getMenuWidth) < 180 ? 180 : unref(getMenuWidth);
         return { width: `${width}px` };
-      });
-
-      const getSplitType = computed(() => {
-        return unref(getSplit) ? MenuSplitTyeEnum.TOP : MenuSplitTyeEnum.NONE;
-      });
-
-      const getMenuMode = computed(() => {
-        return unref(getSplit) ? MenuModeEnum.HORIZONTAL : null;
       });
 
       return {
@@ -175,23 +125,14 @@
         getHeaderClass,
         getShowHeaderLogo,
         getHeaderTheme,
-        getShowHeaderTrigger,
         getIsMobile,
-        getShowBread,
-        getShowContent,
-        getSplitType,
-        getSplit,
-        getMenuMode,
-        getShowTopMenu,
+        MenuModeEnum,
         getShowLocalePicker,
         getShowFullScreen,
         getShowNotice,
-        getUseErrorHandle,
         getLogoWidth,
-        getIsMixSidebar,
         getShowSettingButton,
         getShowSetting,
-        getShowSearch,
       };
     },
   });

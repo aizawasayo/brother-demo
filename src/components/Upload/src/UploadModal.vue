@@ -25,9 +25,9 @@
     </template>
 
     <div class="upload-modal-toolbar">
-      <Alert :message="getHelpText" type="info" banner class="upload-modal-toolbar__text" />
+      <a-alert :message="getHelpText" type="info" banner class="upload-modal-toolbar__text" />
 
-      <Upload
+      <a-upload
         :accept="getStringAccept"
         :multiple="multiple"
         :before-upload="beforeUpload"
@@ -36,16 +36,14 @@
         <a-button type="primary">
           {{ t('component.upload.choose') }}
         </a-button>
-      </Upload>
+      </a-upload>
     </div>
     <FileList :dataSource="fileListRef" :columns="columns" :actionColumn="actionColumn" />
   </BasicModal>
 </template>
 <script lang="ts">
   import { defineComponent, reactive, ref, toRefs, unref, computed, PropType } from 'vue';
-  import { Upload, Alert } from 'ant-design-vue';
-  import { BasicModal, useModalInner } from '/@/components/Modal';
-  //   import { BasicTable, useTable } from '/@/components/Table';
+  import { useModalInner } from '/@/components/Modal';
   // hooks
   import { useUploadType } from './useUpload';
   import { useMessage } from '/@/hooks/web/useMessage';
@@ -62,7 +60,7 @@
   import { useI18n } from '/@/hooks/web/useI18n';
 
   export default defineComponent({
-    components: { BasicModal, Upload, Alert, FileList },
+    components: { FileList },
     props: {
       ...basicProps,
       previewFileList: {

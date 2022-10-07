@@ -12,9 +12,8 @@
 </template>
 <script lang="ts">
   import { defineComponent, watch, ref } from 'vue';
-  //   import { BasicTable, useTable } from '/@/components/Table';
   import FileList from './FileList.vue';
-  import { BasicModal, useModalInner } from '/@/components/Modal';
+  import { useModalInner } from '/@/components/Modal';
   import { previewProps } from './props';
   import { PreviewFileItem } from './typing';
   import { downloadByUrl } from '/@/utils/file/download';
@@ -23,7 +22,7 @@
   import { isArray } from '/@/utils/is';
 
   export default defineComponent({
-    components: { BasicModal, FileList },
+    components: { FileList },
     props: previewProps,
     emits: ['list-change', 'register', 'delete'],
     setup(props, { emit }) {

@@ -13,10 +13,8 @@ declare module 'vue-router' {
     ignoreAuth?: boolean;
     // role info
     roles?: RoleEnum[];
-    // Whether not to cache
-    ignoreKeepAlive?: boolean;
-    // Is it fixed on tab
-    affix?: boolean;
+    // Whether not to cache Page
+    keepAlive?: boolean;
     // icon on tab
     icon?: string;
     frameSrc?: string;

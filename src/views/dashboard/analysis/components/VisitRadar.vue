@@ -1,11 +1,10 @@
 <template>
-  <Card title="转化率" :loading="loading">
+  <a-card title="转化率" :loading="loading">
     <div ref="chartRef" :style="{ width, height }"></div>
-  </Card>
+  </a-card>
 </template>
 <script lang="ts" setup>
   import { Ref, ref, watch } from 'vue';
-  import { Card } from 'ant-design-vue';
   import { useECharts } from '/@/hooks/web/useECharts';
 
   const props = defineProps({
@@ -39,27 +38,27 @@
           splitNumber: 8,
           indicator: [
             {
-              text: '电脑',
+              name: '电脑',
               max: 100,
             },
             {
-              text: '充电器',
+              name: '充电器',
               max: 100,
             },
             {
-              text: '耳机',
+              name: '耳机',
               max: 100,
             },
             {
-              text: '手机',
+              name: '手机',
               max: 100,
             },
             {
-              text: 'Ipad',
+              name: 'Ipad',
               max: 100,
             },
             {
-              text: '耳机',
+              name: '耳机',
               max: 100,
             },
           ],

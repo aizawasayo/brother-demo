@@ -11,7 +11,7 @@
 
     <div class="p-2">
       <CollapseTransition :enable="canExpan">
-        <Skeleton v-if="loading" :active="loading" />
+        <a-skeleton v-if="loading" :active="loading" />
         <div :class="`${prefixCls}__body`" v-else v-show="show">
           <slot></slot>
         </div>
@@ -26,7 +26,6 @@
   import type { PropType } from 'vue';
   import { ref } from 'vue';
   // component
-  import { Skeleton } from 'ant-design-vue';
   import { CollapseTransition } from '/@/components/Transition';
   import CollapseHeader from './CollapseHeader.vue';
   import { triggerWindowResize } from '/@/utils/event';

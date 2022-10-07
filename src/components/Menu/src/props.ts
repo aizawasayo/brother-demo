@@ -19,19 +19,11 @@ export const basicProps = {
     type: String as PropType<MenuMode>,
     default: MenuModeEnum.INLINE,
   },
-
-  type: {
-    type: String as PropType<MenuTypeEnum>,
-    default: MenuTypeEnum.MIX,
-  },
   theme: {
     type: String as PropType<MenuTheme>,
     default: ThemeEnum.DARK,
   },
   inlineCollapsed: propTypes.bool,
-  mixSider: propTypes.bool,
-
-  isHorizontal: propTypes.bool,
   accordion: propTypes.bool.def(true),
   beforeClickFn: {
     type: Function as PropType<(key: string) => Promise<boolean>>,

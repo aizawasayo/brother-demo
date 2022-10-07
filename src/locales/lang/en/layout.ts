@@ -5,27 +5,12 @@ export default {
     dropdownItemDoc: 'Document',
     dropdownItemLoginOut: 'Login Out',
 
-    tooltipErrorLog: 'Error log',
-    tooltipLock: 'Lock screen',
     tooltipNotify: 'Notification',
 
     tooltipEntryFull: 'Full Screen',
     tooltipExitFull: 'Exit Full Screen',
 
-    // lock
-    lockScreenPassword: 'Lock screen password',
-    lockScreen: 'Lock screen',
-    lockScreenBtn: 'Locking',
-
     home: 'Home',
-  },
-  multipleTab: {
-    reload: 'Refresh current',
-    close: 'Close current',
-    closeLeft: 'Close Left',
-    closeRight: 'Close Right',
-    closeOther: 'Close Other',
-    closeAll: 'Close All',
   },
   setting: {
     // content mode
@@ -35,15 +20,6 @@ export default {
     topMenuAlignLeft: 'Left',
     topMenuAlignRight: 'Center',
     topMenuAlignCenter: 'Right',
-    // menu trigger
-    menuTriggerNone: 'Not Show',
-    menuTriggerBottom: 'Bottom',
-    menuTriggerTop: 'Top',
-    // menu type
-    menuTypeSidebar: 'Left menu mode',
-    menuTypeMixSidebar: 'Left menu mixed mode',
-    menuTypeMix: 'Top Menu Mix mode',
-    menuTypeTopMenu: 'Top menu mode',
 
     on: 'On',
     off: 'Off',
@@ -64,7 +40,7 @@ export default {
     interfaceFunction: 'Interface function',
     interfaceDisplay: 'Interface display',
     animation: 'Animation',
-    splitMenu: 'Split menu',
+
     closeMixSidebarOnChange: 'Switch page to close menu',
 
     sysTheme: 'System theme',

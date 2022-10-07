@@ -1,5 +1,5 @@
 <template>
-  <Dropdown placement="bottomLeft" :overlayClassName="`${prefixCls}-dropdown-overlay`">
+  <a-dropdown placement="bottomLeft" :overlayClassName="`${prefixCls}-dropdown-overlay`">
     <span :class="[prefixCls, `${prefixCls}--${theme}`]" class="flex">
       <img :class="`${prefixCls}__header`" :src="getUserInfo.avatar" />
       <span :class="`${prefixCls}__info hidden md:block`">
@@ -10,80 +10,57 @@
     </span>
 
     <template #overlay>
-      <Menu @click="handleMenuClick">
-        <MenuItem
-          key="doc"
-          :text="t('layout.header.dropdownItemDoc')"
-          icon="ion:document-text-outline"
-          v-if="getShowDoc"
-        />
-        <MenuDivider v-if="getShowDoc" />
-        <MenuItem
-          v-if="getUseLockPage"
-          key="lock"
-          :text="t('layout.header.tooltipLock')"
-          icon="ion:lock-closed-outline"
-        />
-        <MenuItem
-          key="logout"
-          :text="t('layout.header.dropdownItemLoginOut')"
-          icon="ion:power-outline"
-        />
-      </Menu>
+      <a-menu @click="handleMenuClick">
+        <a-menu-item key="doc">
+          <span class="flex items-center">
+            <Icon icon="ion:document-text-outline" class="mr-1" />
+            <span>{{ t('layout.header.dropdownItemDoc') }}</span>
+          </span>
+        </a-menu-item>
+
+        <a-menu-divider />
+        <a-menu-item key="logout">
+          <span class="flex items-center">
+            <Icon icon="ion:power-outline" class="mr-1" />
+            <span>{{ t('layout.header.dropdownItemLoginOut') }}</span>
+          </span>
+        </a-menu-item>
+      </a-menu>
     </template>
-  </Dropdown>
-  <LockAction @register="register" />
+  </a-dropdown>
 </template>
 <script lang="ts">
   // components
-  import { Dropdown, Menu } from 'ant-design-vue';
 
   import { defineComponent, computed } from 'vue';
 
   import { DOC_URL } from '/@/settings/siteSetting';
 
   import { useUserStore } from '/@/store/modules/user';
-  import { useHeaderSetting } from '/@/hooks/setting/useHeaderSetting';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useDesign } from '/@/hooks/web/useDesign';
-  import { useModal } from '/@/components/Modal';
 
   import headerImg from '/@/assets/images/header.jpg';
   import { propTypes } from '/@/utils/propTypes';
   import { openWindow } from '/@/utils';
 
-  import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent';
-
-  type MenuEvent = 'logout' | 'doc' | 'lock';
+  type MenuEvent = 'logout' | 'doc';
 
   export default defineComponent({
     name: 'UserDropdown',
-    components: {
-      Dropdown,
-      Menu,
-      MenuItem: createAsyncComponent(() => import('./DropMenuItem.vue')),
-      MenuDivider: Menu.Divider,
-      LockAction: createAsyncComponent(() => import('../lock/LockModal.vue')),
-    },
     props: {
       theme: propTypes.oneOf(['dark', 'light']),
     },
     setup() {
       const { prefixCls } = useDesign('header-user-dropdown');
       const { t } = useI18n();
-      const { getShowDoc, getUseLockPage } = useHeaderSetting();
+
       const userStore = useUserStore();
 
       const getUserInfo = computed(() => {
         const { realName = '', avatar, desc } = userStore.getUserInfo || {};
         return { realName, avatar: avatar || headerImg, desc };
       });
-
-      const [register, { openModal }] = useModal();
-
-      function handleLock() {
-        openModal(true);
-      }
 
       //  login out
       function handleLoginOut() {
@@ -103,9 +80,6 @@
           case 'doc':
             openDoc();
             break;
-          case 'lock':
-            handleLock();
-            break;
         }
       }
 
@@ -114,9 +88,6 @@
         t,
         getUserInfo,
         handleMenuClick,
-        getShowDoc,
-        register,
-        getUseLockPage,
       };
     },
   });

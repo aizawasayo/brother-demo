@@ -1,7 +1,7 @@
 <template>
   <a-col v-bind="actionColOpt" v-if="showActionButtonGroup">
     <div style="width: 100%" :style="{ textAlign: actionColOpt.style.textAlign }">
-      <FormItem>
+      <a-form-item>
         <slot name="resetBefore"></slot>
         <Button
           type="default"
@@ -35,7 +35,7 @@
           <BasicArrow class="ml-1" :expand="!isAdvanced" up />
         </Button>
         <slot name="advanceAfter"></slot>
-      </FormItem>
+      </a-form-item>
     </div>
   </a-col>
 </template>
@@ -43,9 +43,8 @@
   import type { ColEx } from '../types/index';
   //import type { ButtonProps } from 'ant-design-vue/es/button/buttonTypes';
   import { defineComponent, computed, PropType } from 'vue';
-  import { Form, Col } from 'ant-design-vue';
+
   import { Button, ButtonProps } from '/@/components/Button';
-  import { BasicArrow } from '/@/components/Basic';
   import { useFormContext } from '../hooks/useFormContext';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { propTypes } from '/@/utils/propTypes';
@@ -55,10 +54,7 @@
   export default defineComponent({
     name: 'BasicFormAction',
     components: {
-      FormItem: Form.Item,
       Button,
-      BasicArrow,
-      [Col.name]: Col,
     },
     props: {
       showActionButtonGroup: propTypes.bool.def(true),

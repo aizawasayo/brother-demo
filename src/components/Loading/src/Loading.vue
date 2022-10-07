@@ -5,18 +5,16 @@
     :style="[background ? `background-color: ${background}` : '']"
     v-show="loading"
   >
-    <Spin v-bind="$attrs" :tip="tip" :size="size" :spinning="loading" />
+    <a-spin v-bind="$attrs" :tip="tip" :size="size" :spinning="loading" />
   </section>
 </template>
 <script lang="ts">
   import { PropType } from 'vue';
   import { defineComponent } from 'vue';
-  import { Spin } from 'ant-design-vue';
   import { SizeEnum } from '/@/enums/sizeEnum';
 
   export default defineComponent({
     name: 'Loading',
-    components: { Spin },
     props: {
       tip: {
         type: String as PropType<string>,

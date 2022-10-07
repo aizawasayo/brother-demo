@@ -20,7 +20,6 @@
 </template>
 <script lang="ts">
   import { defineComponent, PropType, ref, unref, watch, watchEffect } from 'vue';
-  import { Cascader } from 'ant-design-vue';
   import { propTypes } from '/@/utils/propTypes';
   import { isFunction } from '/@/utils/is';
   import { get, omit } from 'lodash-es';
@@ -38,7 +37,6 @@
     name: 'ApiCascader',
     components: {
       LoadingOutlined,
-      [Cascader.name]: Cascader,
     },
     props: {
       value: {

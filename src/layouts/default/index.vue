@@ -1,71 +1,64 @@
 <template>
-  <Layout :class="prefixCls" v-bind="lockEvents">
+  <a-layout :class="prefixCls">
     <LayoutFeatures />
-    <LayoutHeader fixed v-if="getShowFullHeaderRef" />
-    <Layout :class="[layoutClass]">
-      <LayoutSideBar v-if="getShowSidebar || getIsMobile" />
-      <Layout :class="`${prefixCls}-main`">
-        <LayoutMultipleHeader />
+    <LayoutHeader fixed />
+    <a-layout class="ant-layout ant-layout-has-sider">
+      <LayoutSideBar v-if="getIsMobile" />
+      <a-layout :class="`${prefixCls}-main`">
+        <div :style="getPlaceholderDomStyle"></div>
+        <LayoutBreadcrumb v-if="getShowBreadCrumb && !getIsMobile" />
         <LayoutContent />
         <LayoutFooter />
-      </Layout>
-    </Layout>
-  </Layout>
+      </a-layout>
+    </a-layout>
+  </a-layout>
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed, unref } from 'vue';
-  import { Layout } from 'ant-design-vue';
+  import { defineComponent, computed, CSSProperties } from 'vue';
+
   import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent';
 
   import LayoutHeader from './header/index.vue';
   import LayoutContent from './content/index.vue';
   import LayoutSideBar from './sider/index.vue';
-  import LayoutMultipleHeader from './header/MultipleHeader.vue';
-
-  import { useHeaderSetting } from '/@/hooks/setting/useHeaderSetting';
-  import { useMenuSetting } from '/@/hooks/setting/useMenuSetting';
+  import LayoutBreadcrumb from './breadcrumb.vue';
   import { useDesign } from '/@/hooks/web/useDesign';
-  import { useLockPage } from '/@/hooks/web/useLockPage';
-
   import { useAppInject } from '/@/hooks/web/useAppInject';
+  import { useLayoutHeight } from './content/useContentViewHeight';
+  import { useRootSetting } from '/@/hooks/setting/useRootSetting';
 
   export default defineComponent({
     name: 'DefaultLayout',
     components: {
-      LayoutFeatures: createAsyncComponent(() => import('/@/layouts/default/feature/index.vue')),
+      LayoutFeatures: createAsyncComponent(() => import('./feature.vue')),
       LayoutFooter: createAsyncComponent(() => import('/@/layouts/default/footer/index.vue')),
       LayoutHeader,
       LayoutContent,
       LayoutSideBar,
-      LayoutMultipleHeader,
-      Layout,
+      LayoutBreadcrumb,
     },
     setup() {
       const { prefixCls } = useDesign('default-layout');
       const { getIsMobile } = useAppInject();
-      const { getShowFullHeaderRef } = useHeaderSetting();
-      const { getShowSidebar, getIsMixSidebar, getShowMenu } = useMenuSetting();
 
-      // Create a lock screen monitor
-      const lockEvents = useLockPage();
+      const { getShowBreadCrumb } = useRootSetting();
 
-      const layoutClass = computed(() => {
-        let cls: string[] = ['ant-layout'];
-        if (unref(getIsMixSidebar) || unref(getShowMenu)) {
-          cls.push('ant-layout-has-sider');
-        }
-        return cls;
+      const { setHeaderHeight } = useLayoutHeight();
+
+      const getPlaceholderDomStyle = computed((): CSSProperties => {
+        let height = 60;
+
+        setHeaderHeight(height);
+        return {
+          height: `${height}px`,
+        };
       });
-
       return {
-        getShowFullHeaderRef,
-        getShowSidebar,
         prefixCls,
         getIsMobile,
-        getIsMixSidebar,
-        layoutClass,
-        lockEvents,
+        getShowBreadCrumb,
+        getPlaceholderDomStyle,
       };
     },
   });

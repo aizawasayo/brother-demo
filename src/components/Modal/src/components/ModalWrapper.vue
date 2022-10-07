@@ -19,7 +19,6 @@
     onUnmounted,
   } from 'vue';
   import { useWindowSizeFn } from '/@/hooks/event/useWindowSizeFn';
-  import { ScrollContainer } from '/@/components/Container';
   import { createModalContext } from '../hooks/useModalContext';
   import { useMutationObserver } from '@vueuse/core';
 
@@ -38,7 +37,6 @@
 
   export default defineComponent({
     name: 'ModalWrapper',
-    components: { ScrollContainer },
     inheritAttrs: false,
     props,
     emits: ['height-change', 'ext-height'],

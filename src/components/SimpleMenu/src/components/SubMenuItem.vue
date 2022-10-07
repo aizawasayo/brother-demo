@@ -16,7 +16,7 @@
       </CollapseTransition>
     </template>
 
-    <Popover
+    <a-popover
       placement="right"
       :overlayClassName="`${prefixCls}-menu-popover`"
       v-else
@@ -51,7 +51,7 @@
           </ul>
         </div>
       </template>
-    </Popover>
+    </a-popover>
   </li>
 </template>
 
@@ -73,20 +73,12 @@
   import { propTypes } from '/@/utils/propTypes';
   import { useMenuItem } from './useMenu';
   import { useSimpleRootMenuContext } from './useSimpleMenuContext';
-  import { CollapseTransition } from '/@/components/Transition';
-  import Icon from '/@/components/Icon';
-  import { Popover } from 'ant-design-vue';
   import { isBoolean, isObject } from '/@/utils/is';
   import mitt from '/@/utils/mitt';
 
   const DELAY = 200;
   export default defineComponent({
     name: 'SubMenu',
-    components: {
-      Icon,
-      CollapseTransition,
-      Popover,
-    },
     props: {
       name: {
         type: [String, Number] as PropType<string | number>,

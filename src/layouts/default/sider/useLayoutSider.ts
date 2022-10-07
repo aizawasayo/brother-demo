@@ -2,8 +2,6 @@ import type { Ref } from 'vue';
 
 import { computed, unref, onMounted, nextTick, ref } from 'vue';
 
-import { TriggerEnum } from '/@/enums/menuEnum';
-
 import { useMenuSetting } from '/@/hooks/setting/useMenuSetting';
 import { useDebounceFn } from '@vueuse/core';
 
@@ -24,34 +22,6 @@ export function useSiderEvent() {
   }
 
   return { getCollapsedWidth, onBreakpointChange };
-}
-
-/**
- * Handle related operations of menu folding
- */
-export function useTrigger(getIsMobile: Ref<boolean>) {
-  const { getTrigger, getSplit } = useMenuSetting();
-
-  const getShowTrigger = computed(() => {
-    const trigger = unref(getTrigger);
-
-    return (
-      trigger !== TriggerEnum.NONE &&
-      !unref(getIsMobile) &&
-      (trigger === TriggerEnum.FOOTER || unref(getSplit))
-    );
-  });
-
-  const getTriggerAttr = computed(() => {
-    if (unref(getShowTrigger)) {
-      return {};
-    }
-    return {
-      trigger: null,
-    };
-  });
-
-  return { getTriggerAttr, getShowTrigger };
 }
 
 /**

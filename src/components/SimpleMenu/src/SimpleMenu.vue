@@ -46,14 +46,12 @@
         default: () => [],
       },
       collapse: propTypes.bool,
-      mixSider: propTypes.bool,
       theme: propTypes.string,
       accordion: propTypes.bool.def(true),
       collapsedShowTitle: propTypes.bool,
       beforeClickFn: {
         type: Function as PropType<(key: string) => Promise<boolean>>,
       },
-      isSplitMenu: propTypes.bool,
     },
     emits: ['menuClick'],
     setup(props, { attrs, emit }) {
@@ -68,15 +66,9 @@
 
       const { currentRoute } = useRouter();
       const { prefixCls } = useDesign('simple-menu');
-      const { items, accordion, mixSider, collapse } = toRefs(props);
+      const { items, accordion, collapse } = toRefs(props);
 
-      const { setOpenKeys, getOpenKeys } = useOpenKeys(
-        menuState,
-        items,
-        accordion,
-        mixSider,
-        collapse,
-      );
+      const { setOpenKeys, getOpenKeys } = useOpenKeys(menuState, items, accordion, collapse);
 
       const getBindValues = computed(() => ({ ...attrs, ...props }));
 
@@ -92,16 +84,16 @@
         { immediate: true },
       );
 
-      watch(
-        () => props.items,
-        () => {
-          if (!props.isSplitMenu) {
-            return;
-          }
-          setOpenKeys(currentRoute.value.path);
-        },
-        { flush: 'post' },
-      );
+      // watch(
+      //   () => props.items,
+      //   () => {
+      //     if (true) {
+      //       return;
+      //     }
+      //     setOpenKeys(currentRoute.value.path);
+      //   },
+      //   { flush: 'post' },
+      // );
 
       listenerRouteChange((route) => {
         if (route.name === REDIRECT_NAME) return;
